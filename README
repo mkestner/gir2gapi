@@ -1,0 +1,11 @@
+gir2gapi - Converter to produce GAPI XML files from gir files.
+
+This project hopes to take advantage of the gobject-introspection
+integration into Gnome libraries to replace the GAPI parsing of 
+C sources.  The idea is to produce a converter to produce GAPI
+api.xml files from a gir definition of the API, and then consume
+this output in the existing generation tools.  It will amount to
+a proprocessing step but one that should eliminate parsing
+headaches and hopefully result in less manual intervention
+into the binding production.
+
