@@ -4,12 +4,16 @@ pkglib_DATA = $(TARGETS)
 bin_SCRIPTS = gir2gapi
 
 sources =				\
+	Callback.cs			\
 	Converter.cs			\
 	Enumeration.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
 	Mangler.cs			\
 	Namespace.cs			\
+	Parameter.cs			\
+	Parameters.cs			\
+	ReturnValue.cs			\
 	#
 
 resources =				\

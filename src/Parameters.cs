@@ -25,67 +25,37 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class Namespace {
+	public class Parameters {
 
 		XmlElement elem;
 
-		public Namespace (XmlElement elem)
+		public Parameters (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("namespace");
-			SetAttributes (gapi_elem);
+			XmlElement gapi_elem = doc.CreateElement ("parameters");
+			if (elem.Attributes.Count > 0) 
+				Console.WriteLine ("Unexpected attributes on parameters element");
 			AddChildren (gapi_elem);
 			return gapi_elem;
 		}
 
-		void AddChildren (XmlElement gapi_elem)
+		void AddChildren (XmlElement gapi_child)
 		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "bitfield":
-				case "enumeration":
-					Enumeration enum_bf = new Enumeration (child);
-					gapi_elem.AppendChild (enum_bf.CreateGapiElement (gapi_elem.OwnerDocument));
-					break;
-				case "callback":
-					Callback cb = new Callback (child);
-					gapi_elem.AppendChild (cb.CreateGapiElement (gapi_elem.OwnerDocument));
-					break;
-				case "class":
-				case "constant":
-				case "function":
-				case "interface":
-				case "record":
+				case "parameter":
+					Parameter p = new Parameter (child);
+					gapi_child.AppendChild (p.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				default:
-					Console.WriteLine ("Unexpected namespace child: " + node.Name);
-					break;
-				}
-			}
-		}
-
-		void SetAttributes (XmlElement gapi_elem)
-		{
-			foreach (XmlAttribute attr in elem.Attributes) {
-				switch (attr.Name) {
-				case "name":
-					gapi_elem.SetAttribute ("name", attr.Value);
-					break;
-				case "shared-library":
-					gapi_elem.SetAttribute ("library", attr.Value);
-					break;
-				case "c:prefix":
-				case "version":
-					break;
-				default:
-					Console.WriteLine ("Unexpected namespace attribute: " + attr.Name);
+					Console.WriteLine ("Unexpected child on parameters element: " + node.Name);
 					break;
 				}
 			}

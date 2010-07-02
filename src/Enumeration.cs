@@ -78,7 +78,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "member":
-					gapi_child.AppendChild (CreateMember (child));
+					gapi_child.AppendChild (CreateMember (child, gapi_child.OwnerDocument));
 					break;
 				default:
 					Console.WriteLine ("Unexpected enumeration/bitfield child: " + node.Name);
@@ -87,9 +87,9 @@ namespace Gir2Gapi {
 			}
 		}
 
-		XmlElement CreateMember (XmlElement child)
+		XmlElement CreateMember (XmlElement child, XmlDocument doc)
 		{
-			XmlElement gapi_child = child.OwnerDocument.CreateElement ("member");
+			XmlElement gapi_child = doc.CreateElement ("member");
 			foreach (XmlAttribute attr in child.Attributes) {
 				switch (attr.Name) {
 				case "name":

@@ -25,50 +25,21 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class Namespace {
+	public class Callback {
 
 		XmlElement elem;
 
-		public Namespace (XmlElement elem)
+		public Callback (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("namespace");
+			XmlElement gapi_elem = doc.CreateElement ("callback");
 			SetAttributes (gapi_elem);
 			AddChildren (gapi_elem);
 			return gapi_elem;
-		}
-
-		void AddChildren (XmlElement gapi_elem)
-		{
-			foreach (XmlNode node in elem.ChildNodes) {
-				XmlElement child = node as XmlElement;
-				if (child == null)
-					continue;
-				switch (node.Name) {
-				case "bitfield":
-				case "enumeration":
-					Enumeration enum_bf = new Enumeration (child);
-					gapi_elem.AppendChild (enum_bf.CreateGapiElement (gapi_elem.OwnerDocument));
-					break;
-				case "callback":
-					Callback cb = new Callback (child);
-					gapi_elem.AppendChild (cb.CreateGapiElement (gapi_elem.OwnerDocument));
-					break;
-				case "class":
-				case "constant":
-				case "function":
-				case "interface":
-				case "record":
-					break;
-				default:
-					Console.WriteLine ("Unexpected namespace child: " + node.Name);
-					break;
-				}
-			}
 		}
 
 		void SetAttributes (XmlElement gapi_elem)
@@ -78,14 +49,37 @@ namespace Gir2Gapi {
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
-				case "shared-library":
-					gapi_elem.SetAttribute ("library", attr.Value);
+				case "c:type":
+					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
-				case "c:prefix":
+				case "doc":
 				case "version":
+					// Ignore
 					break;
 				default:
-					Console.WriteLine ("Unexpected namespace attribute: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on callback element: " + attr.Name);
+					break;
+				}
+			}
+		}
+
+		void AddChildren (XmlElement gapi_child)
+		{
+			foreach (XmlNode node in elem.ChildNodes) {
+				XmlElement child = node as XmlElement;
+				if (child == null)
+					continue;
+				switch (node.Name) {
+				case "return-value":
+					ReturnValue retval = new ReturnValue (child);
+					gapi_child.AppendChild (retval.CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "parameters":
+					Parameters parms = new Parameters (child);
+					gapi_child.AppendChild (parms.CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				default:
+					Console.WriteLine ("Unexpected child on callback element: " + node.Name);
 					break;
 				}
 			}
