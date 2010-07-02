@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+*.exe
+*.mdb
+aclocal.m4
+autom4te.cache
+config.*
+configure
+gir2gapi
+install-sh
+missing
