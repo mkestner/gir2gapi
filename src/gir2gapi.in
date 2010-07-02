@@ -1,0 +1,2 @@
+#!/bin/sh
+LD_LIBRARY_PATH=@prefix@/lib/gir2gapi:$LD_LIBRARY_PATH @RUNTIME@ @prefix@/lib/gir2gapi/gir2gapi.exe "$@"

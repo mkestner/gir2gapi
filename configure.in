@@ -1,0 +1,46 @@
+AC_INIT(README)
+AC_CANONICAL_HOST
+AM_INIT_AUTOMAKE(gir2gapi, 0.1)
+AM_MAINTAINER_MODE
+
+AC_PROG_INSTALL
+
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test "x$PKG_CONFIG" = "xno"; then
+	AC_MSG_ERROR([You need to install pkg-config])
+fi
+
+PKG_CHECK_MODULES(MONO_DEPENDENCY, mono, has_mono=true, has_mono=false)
+if test "x$has_mono" = "xtrue"; then
+	AC_PATH_PROG(RUNTIME, mono, no)
+	AC_PATH_PROG(CSC, gmcs, no)
+else
+AC_PATH_PROG(CSC, csc.exe, no)
+if test x$CSC = "xno"; then
+	AC_MSG_ERROR([You need to install either mono or .Net])
+else
+	RUNTIME=
+fi
+fi
+
+CS="C#"
+if test "x$CSC" = "xno" ; then
+	AC_MSG_ERROR([No $CS compiler found])
+fi
+
+AC_SUBST(CSC)
+AC_SUBST(RUNTIME)
+
+AC_OUTPUT([
+src/Makefile
+src/gir2gapi
+Makefile
+])
+
+echo "---"
+echo "Configuration summary"
+echo ""
+echo "   * Installation prefix = $prefix"
+echo "   * $CS compiler: $CSC"
+echo "---"
+
