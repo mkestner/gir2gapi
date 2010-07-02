@@ -32,7 +32,6 @@ namespace Gir2Gapi {
 		{
 			try {
 				new Converter (args).Run ();
-				Console.WriteLine ("Doesn't do anything yet!");
 				return 0;
 			} catch (Exception) {
 				return 1;

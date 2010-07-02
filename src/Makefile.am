@@ -5,8 +5,10 @@ bin_SCRIPTS = gir2gapi
 
 sources =				\
 	Converter.cs			\
+	Enumeration.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
+	Mangler.cs			\
 	Namespace.cs			\
 	#
 

@@ -25,39 +25,37 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class Namespace {
+	public class Enumeration {
 
 		XmlElement elem;
 
-		public Namespace (XmlElement elem)
+		public Enumeration (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement result = doc.CreateElement ("namespace");
+			XmlElement result = doc.CreateElement ("enum");
 			result.SetAttribute ("name", elem.GetAttribute ("name"));
-			result.SetAttribute ("library", elem.GetAttribute ("shared-library"));
+			result.SetAttribute ("cname", elem.GetAttribute ("c:type"));
+			if (elem.HasAttribute ("glib:get-type"))
+				result.SetAttribute ("gtype", elem.GetAttribute ("glib:get-type"));
+			result.SetAttribute ("type", elem.Name == "enumeration" ? "enum" : "flags");
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "bitfield":
-				case "enumeration":
-					Enumeration enum_bf = new Enumeration (child);
-					result.AppendChild (enum_bf.CreateGapiElement (doc));
-					break;
-				case "callback":
-				case "class":
-				case "constant":
-				case "function":
-				case "interface":
-				case "record":
+				case "member":
+					XmlElement gapi_child = doc.CreateElement ("member");
+					gapi_child.SetAttribute ("name", Mangler.StudlyCase (child.GetAttribute ("name")));
+					gapi_child.SetAttribute ("cname", child.GetAttribute ("c:identifier"));
+					gapi_child.SetAttribute ("value", child.GetAttribute ("value"));
+					result.AppendChild (gapi_child);
 					break;
 				default:
-					Console.WriteLine ("Unexpected namespace child: " + node.Name);
+					Console.WriteLine ("Unexpected enumeration/bitfield child: " + node.Name);
 					break;
 				}
 			}
