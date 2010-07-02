@@ -5,16 +5,22 @@ bin_SCRIPTS = gir2gapi
 
 sources =				\
 	Converter.cs			\
+	GapiDocument.cs			\
+	GirDocument.cs			\
 	#
+
+resources =				\
+	empty-api.xml
 
 DISTCLEANFILES = gir2gapi
 
-EXTRA_DIST = $(sources) gir2gapi.in
+EXTRA_DIST = $(sources) $(resources) gir2gapi.in
 
 CLEANFILES = $(TARGETS)
 
 build_sources = $(addprefix $(srcdir)/, $(sources))
+build_resources = $(addprefix $(srcdir)/, $(resources))
 
-$(TARGETS): $(build_sources)
-	$(CSC) -debug -out:$(ASSEMBLY) $(build_sources)
+$(TARGETS): $(build_sources) $(build_resources)
+	$(CSC) -debug -out:$(ASSEMBLY) $(addprefix -resource:, $(build_resources)) $(build_sources)
 
