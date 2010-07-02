@@ -36,31 +36,81 @@ namespace Gir2Gapi {
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement result = doc.CreateElement ("enum");
-			result.SetAttribute ("name", elem.GetAttribute ("name"));
-			result.SetAttribute ("cname", elem.GetAttribute ("c:type"));
-			if (elem.HasAttribute ("glib:get-type"))
-				result.SetAttribute ("gtype", elem.GetAttribute ("glib:get-type"));
-			result.SetAttribute ("type", elem.Name == "enumeration" ? "enum" : "flags");
+			XmlElement gapi_elem = doc.CreateElement ("enum");
+			SetAttributes (gapi_elem);
+			AddChildren (gapi_elem);
+			return gapi_elem;
+		}
+
+		void SetAttributes (XmlElement gapi_elem)
+		{
+			gapi_elem.SetAttribute ("type", elem.Name == "enumeration" ? "enum" : "flags");
+
+			foreach (XmlAttribute attr in elem.Attributes) {
+				switch (attr.Name) {
+				case "name":
+					gapi_elem.SetAttribute ("name", attr.Value);
+					break;
+				case "c:type":
+					gapi_elem.SetAttribute ("cname", attr.Value);
+					break;
+				case "glib:get-type":
+					gapi_elem.SetAttribute ("gtype", attr.Value);
+					break;
+				case "doc":
+				case "glib:error-quark":
+				case "glib:type-name":
+				case "version":
+					// Ignore
+					break;
+				default:
+					Console.WriteLine ("Unexpected attribute on enumeration/bitfield element: " + attr.Name);
+					break;
+				}
+			}
+		}
+
+		void AddChildren (XmlElement gapi_child)
+		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
 				case "member":
-					XmlElement gapi_child = doc.CreateElement ("member");
-					gapi_child.SetAttribute ("name", Mangler.StudlyCase (child.GetAttribute ("name")));
-					gapi_child.SetAttribute ("cname", child.GetAttribute ("c:identifier"));
-					gapi_child.SetAttribute ("value", child.GetAttribute ("value"));
-					result.AppendChild (gapi_child);
+					gapi_child.AppendChild (CreateMember (child));
 					break;
 				default:
 					Console.WriteLine ("Unexpected enumeration/bitfield child: " + node.Name);
 					break;
 				}
 			}
-					
-			return result;
+		}
+
+		XmlElement CreateMember (XmlElement child)
+		{
+			XmlElement gapi_child = child.OwnerDocument.CreateElement ("member");
+			foreach (XmlAttribute attr in child.Attributes) {
+				switch (attr.Name) {
+				case "name":
+					gapi_child.SetAttribute ("name", attr.Value);
+					break;
+				case "c:identifier":
+					gapi_child.SetAttribute ("cname", attr.Value);
+					break;
+				case "value":
+					gapi_child.SetAttribute ("value", attr.Value);
+					break;
+				case "glib:nick":
+					// Ignore
+					break;
+				default:
+					Console.WriteLine ("Unexpected attribute on enumeration/bitfield member element: " + attr.Name);
+					break;
+				}
+			}
+
+			return gapi_child;
 		}
 	}
 }

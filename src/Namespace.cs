@@ -36,9 +36,14 @@ namespace Gir2Gapi {
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement result = doc.CreateElement ("namespace");
-			result.SetAttribute ("name", elem.GetAttribute ("name"));
-			result.SetAttribute ("library", elem.GetAttribute ("shared-library"));
+			XmlElement gapi_elem = doc.CreateElement ("namespace");
+			SetAttributes (gapi_elem);
+			AddChildren (gapi_elem);
+			return gapi_elem;
+		}
+
+		void AddChildren (XmlElement gapi_elem)
+		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
@@ -47,7 +52,7 @@ namespace Gir2Gapi {
 				case "bitfield":
 				case "enumeration":
 					Enumeration enum_bf = new Enumeration (child);
-					result.AppendChild (enum_bf.CreateGapiElement (doc));
+					gapi_elem.AppendChild (enum_bf.CreateGapiElement (gapi_elem.OwnerDocument));
 					break;
 				case "callback":
 				case "class":
@@ -61,8 +66,26 @@ namespace Gir2Gapi {
 					break;
 				}
 			}
-					
-			return result;
+		}
+
+		void SetAttributes (XmlElement gapi_elem)
+		{
+			foreach (XmlAttribute attr in elem.Attributes) {
+				switch (attr.Name) {
+				case "name":
+					gapi_elem.SetAttribute ("name", attr.Value);
+					break;
+				case "shared-library":
+					gapi_elem.SetAttribute ("library", attr.Value);
+					break;
+				case "c:prefix":
+				case "version":
+					break;
+				default:
+					Console.WriteLine ("Unexpected namespace attribute: " + attr.Name);
+					break;
+				}
+			}
 		}
 	}
 }
