@@ -21,40 +21,25 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class GirDocument : XmlDocument {
+	public class Namespace {
 
-		public GirDocument (string path) : base ()
+		XmlElement elem;
+
+		public Namespace (XmlElement elem)
 		{
-			Load (path);
-			if (DocumentElement.Name != "repository")
-				throw new Exception ("Invalid file");
-			foreach (XmlNode node in DocumentElement.ChildNodes) {
-				XmlElement elem = node as XmlElement;
-				if (elem == null)
-					continue;
-				switch (node.Name) {
-				case "include":
-				case "package":
-				case "c:include":
-					break;
-				case "namespace":
-					namespaces.Add (new Namespace (elem));
-					break;
-				default:
-					Console.WriteLine ("Unexpected node in repository doc: " + node.Name);
-					break;
-				}
-			}
+			this.elem = elem;
 		}
 
-		List<Namespace> namespaces = new List<Namespace> ();
-		public List<Namespace> Namespaces {
-			get { return namespaces; }
+		public XmlElement CreateGapiElement (XmlDocument doc)
+		{
+			XmlElement result = doc.CreateElement ("namespace");
+			result.SetAttribute ("name", elem.GetAttribute ("name"));
+			result.SetAttribute ("library", elem.GetAttribute ("shared-library"));
+			return result;
 		}
 	}
 }

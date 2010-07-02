@@ -21,6 +21,8 @@
 
 
 using System;
+using System.IO;
+using System.Xml;
 
 namespace Gir2Gapi {
 
@@ -29,7 +31,7 @@ namespace Gir2Gapi {
 		public static int Main (string[] args)
 		{
 			try {
-				new Converter (args);
+				new Converter (args).Run ();
 				Console.WriteLine ("Doesn't do anything yet!");
 				return 0;
 			} catch (Exception) {
@@ -64,6 +66,19 @@ namespace Gir2Gapi {
 			Console.Error.WriteLine ("Usage: gir2gapi <args>");
 			Console.Error.WriteLine ("   --gir=<file> : GIR repository file to convert : required");
 			Console.Error.WriteLine ("   --out=<file> : path to place converted document : required");
+		}
+
+		void Run ()
+		{
+			GirDocument gir = new GirDocument (gir_path);
+			GapiDocument gapi = new GapiDocument ();
+			foreach (Namespace n in gir.Namespaces)
+				gapi.DocumentElement.AppendChild (n.CreateGapiElement (gapi));
+			XmlTextWriter writer = new XmlTextWriter (new StreamWriter (output_path));
+			writer.Formatting = Formatting.Indented;
+			writer.Indentation = 2;
+			writer.IndentChar = ' ';
+			gapi.Save (writer);
 		}
 	}
 }

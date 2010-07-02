@@ -7,6 +7,7 @@ sources =				\
 	Converter.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
+	Namespace.cs			\
 	#
 
 resources =				\
