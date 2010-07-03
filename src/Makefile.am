@@ -5,14 +5,19 @@ bin_SCRIPTS = gir2gapi
 
 sources =				\
 	Callback.cs			\
+	Class.cs			\
+	Constant.cs			\
 	Converter.cs			\
 	Enumeration.cs			\
+	Function.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
+	Interface.cs			\
 	Mangler.cs			\
 	Namespace.cs			\
 	Parameter.cs			\
 	Parameters.cs			\
+	Record.cs			\
 	ReturnValue.cs			\
 	#
 
