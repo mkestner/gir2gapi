@@ -31,6 +31,7 @@ namespace Gir2Gapi {
 		XmlElement elem;
 		List<Callback> callbacks = new List<Callback> ();
 		List<Class> classes = new List<Class> ();
+		List<ClassStruct> cstructs = new List<ClassStruct> ();
 		List<Constant> constants = new List<Constant> ();
 		List<Enumeration> enums = new List<Enumeration> ();
 		List<Function> functions = new List<Function> ();
@@ -70,7 +71,10 @@ namespace Gir2Gapi {
 					ifaces.Add (new Interface (child));
 					break;
 				case "record":
-					records.Add (new Record (child));
+					if (child.HasAttribute ("glib:is-gtype-struct-for"))
+						cstructs.Add (new ClassStruct (child));
+					else
+						records.Add (new Record (child));
 					break;
 				default:
 					Console.WriteLine ("Unexpected namespace child: " + node.Name);
@@ -87,8 +91,9 @@ namespace Gir2Gapi {
 			CreateEnumElements (gapi_elem);
 			CreateCallbackElements (gapi_elem);
 			CreateConstantsElement (gapi_elem);
+			CreateObjectElements (gapi_elem);
 
-			// FIXME: classes, functions, interfaces, and records
+			// FIXME: functions, interfaces, and records
 			return gapi_elem;
 		}
 
@@ -113,6 +118,12 @@ namespace Gir2Gapi {
 		{
 			foreach (Enumeration e in enums)
 				gapi_elem.AppendChild (e.CreateGapiElement (gapi_elem.OwnerDocument));
+		}
+
+		void CreateObjectElements (XmlElement gapi_elem)
+		{
+			foreach (Class cls in classes)
+				gapi_elem.AppendChild (cls.CreateGapiElement (gapi_elem.OwnerDocument, cstructs, functions));
 		}
 
 		void SetAttributes (XmlElement gapi_elem)

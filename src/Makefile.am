@@ -6,6 +6,7 @@ bin_SCRIPTS = gir2gapi
 sources =				\
 	Callback.cs			\
 	Class.cs			\
+	ClassStruct.cs			\
 	Constant.cs			\
 	Converter.cs			\
 	Enumeration.cs			\
