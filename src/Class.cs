@@ -68,7 +68,7 @@ namespace Gir2Gapi {
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
 				case "parent":
-					gapi_elem.SetAttribute ("parent", GetParentType (attr.Value));
+					gapi_elem.SetAttribute ("parent", FindCType (attr.Value));
 					break;
 				case "glib:get-type":
 					gapi_elem.SetAttribute ("gtype", attr.Value);
@@ -86,7 +86,7 @@ namespace Gir2Gapi {
 			}
 		}
 
-		string GetParentType (string name)
+		string FindCType (string name)
 		{
 			if (name.StartsWith ("GObject."))
 				return "G" + name.Substring (8);
@@ -94,7 +94,7 @@ namespace Gir2Gapi {
 			if (name.IndexOf ('.') < 0) {
 				foreach (XmlNode node in elem.ParentNode.ChildNodes) {
 					XmlElement sibling = node as XmlElement;
-					if (sibling != null && sibling.Name == "class" && sibling.GetAttribute ("name") == name)
+					if (sibling != null && sibling.GetAttribute ("name") == name)
 						return sibling.GetAttribute ("c:type");
 				}
 				Console.WriteLine ("Unable to find parent type:" + name);
@@ -107,6 +107,7 @@ namespace Gir2Gapi {
 
 		void AddChildren (XmlElement gapi_child)
 		{
+			XmlElement implements_elem = null;
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
@@ -118,12 +119,20 @@ namespace Gir2Gapi {
 				case "constructor":
 					gapi_child.AppendChild (new Ctor (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
+				case "implements":
+					if (implements_elem == null) {
+						implements_elem = gapi_child.OwnerDocument.CreateElement ("implements");
+						gapi_child.AppendChild (implements_elem);
+					}
+					XmlElement iface_elem = gapi_child.OwnerDocument.CreateElement ("interface");
+					iface_elem.SetAttribute ("cname", FindCType (child.GetAttribute ("name")));
+					implements_elem.AppendChild (iface_elem);
+					break;
 				case "virtual-method":
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "function":
 				case "glib:signal":
-				case "implements":
 				case "method":
 				case "property":
 					//FIXME: handle these
