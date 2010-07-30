@@ -105,7 +105,7 @@ namespace Gir2Gapi {
 					// Ignore
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on return-value/type element: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on parameter/type element: " + attr.Name);
 					break;
 				}
 			}
