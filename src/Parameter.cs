@@ -49,8 +49,15 @@ namespace Gir2Gapi {
 				case "allow-none":
 					gapi_elem.SetAttribute ("allow-null", "true");
 					break;
+				case "caller-allocates":
+					if (attr.Value == "1")
+						gapi_elem.SetAttribute ("pass_as", "ref");
+					break;
 				case "destroy":
 					gapi_elem.SetAttribute ("destroy", attr.Value);
+					break;
+				case "direction":
+					gapi_elem.SetAttribute ("pass_as", attr.Value);
 					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);

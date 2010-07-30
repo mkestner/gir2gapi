@@ -113,11 +113,11 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "field":
-					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
-					break;
 				case "constructor":
 					gapi_child.AppendChild (new Ctor (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "field":
+					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "implements":
 					if (implements_elem == null) {
@@ -128,12 +128,14 @@ namespace Gir2Gapi {
 					iface_elem.SetAttribute ("cname", FindCType (child.GetAttribute ("name")));
 					implements_elem.AppendChild (iface_elem);
 					break;
+				case "method":
+					gapi_child.AppendChild (new Method (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
 				case "virtual-method":
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "function":
 				case "glib:signal":
-				case "method":
 				case "property":
 					//FIXME: handle these
 					break;

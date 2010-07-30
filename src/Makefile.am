@@ -17,6 +17,7 @@ sources =				\
 	GirDocument.cs			\
 	Interface.cs			\
 	Mangler.cs			\
+	Method.cs			\
 	Namespace.cs			\
 	Parameter.cs			\
 	Parameters.cs			\
