@@ -112,8 +112,10 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "constructor":
 				case "field":
+					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "constructor":
 				case "function":
 				case "glib:signal":
 				case "implements":
