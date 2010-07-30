@@ -25,60 +25,30 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class ClassStruct {
+	public class Field {
 
 		XmlElement elem;
 
-		public ClassStruct (XmlElement elem)
+		public Field (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
-		public string Parent {
-			get { return elem.GetAttribute ("glib:is-gtype-struct-for"); }
-		}
-
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("class_struct");
-			SetAttributes (gapi_elem);
-			AddChildren (gapi_elem);
+			XmlElement gapi_elem = null;
+			if (elem ["type"] != null) {
+				gapi_elem = doc.CreateElement ("field");
+				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
+				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
+				gapi_elem.SetAttribute ("type", elem ["type"].GetAttribute ("c:type"));
+			} else if (elem ["callback"] != null) {
+				gapi_elem = doc.CreateElement ("method");
+				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("c:type"));
+			} else {
+				Console.WriteLine ("Unexpected field element: " + elem.OuterXml);
+			}
 			return gapi_elem;
-		}
-
-		void SetAttributes (XmlElement gapi_elem)
-		{
-			foreach (XmlAttribute attr in elem.Attributes) {
-				switch (attr.Name) {
-				case "c:type":
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
-				case "glib:is-gtype-struct-for":
-				case "name":
-					// Ignore
-					break;
-				default:
-					Console.WriteLine ("Unexpected attribute on class-struct record element: " + attr.Name);
-					break;
-				}
-			}
-		}
-
-		void AddChildren (XmlElement gapi_child)
-		{
-			foreach (XmlNode node in elem.ChildNodes) {
-				XmlElement child = node as XmlElement;
-				if (child == null)
-					continue;
-				switch (node.Name) {
-				case "field":
-					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
-					break;
-				default:
-					Console.WriteLine ("Unexpected child on class-struct record element: " + node.Name);
-					break;
-				}
-			}
 		}
 	}
 }

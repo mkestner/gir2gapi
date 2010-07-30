@@ -10,6 +10,7 @@ sources =				\
 	Constant.cs			\
 	Converter.cs			\
 	Enumeration.cs			\
+	Field.cs			\
 	Function.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
