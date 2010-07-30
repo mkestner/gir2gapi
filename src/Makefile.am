@@ -21,6 +21,7 @@ sources =				\
 	Namespace.cs			\
 	Parameter.cs			\
 	Parameters.cs			\
+	Property.cs			\
 	Record.cs			\
 	ReturnValue.cs			\
 	VirtualMethod.cs		\

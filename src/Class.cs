@@ -131,12 +131,14 @@ namespace Gir2Gapi {
 				case "method":
 					gapi_child.AppendChild (new Method (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
+				case "property":
+					gapi_child.AppendChild (new Property (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
 				case "virtual-method":
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "function":
 				case "glib:signal":
-				case "property":
 					//FIXME: handle these
 					break;
 				default:
