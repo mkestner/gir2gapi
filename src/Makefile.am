@@ -9,6 +9,7 @@ sources =				\
 	ClassStruct.cs			\
 	Constant.cs			\
 	Converter.cs			\
+	Ctor.cs				\
 	Enumeration.cs			\
 	Field.cs			\
 	Function.cs			\

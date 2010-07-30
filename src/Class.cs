@@ -115,10 +115,12 @@ namespace Gir2Gapi {
 				case "field":
 					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
+				case "constructor":
+					gapi_child.AppendChild (new Ctor (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
 				case "virtual-method":
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
-				case "constructor":
 				case "function":
 				case "glib:signal":
 				case "implements":
