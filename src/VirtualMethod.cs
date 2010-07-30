@@ -25,85 +25,63 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class ReturnValue {
+	public class VirtualMethod {
 
 		XmlElement elem;
+		bool throws;
 
-		public ReturnValue (XmlElement elem)
+		public VirtualMethod (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("return-type");
-			SetAttributeInfo (gapi_elem);
-			AddChildInfo (gapi_elem);
+			XmlElement gapi_elem = doc.CreateElement ("virtual_method");
+			SetAttributes (gapi_elem);
+			AddChildren (gapi_elem);
 			return gapi_elem;
 		}
 
-		void SetAttributeInfo (XmlElement gapi_elem)
+		void SetAttributes (XmlElement gapi_elem)
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
-				case "allow-none":
-					gapi_elem.SetAttribute ("allow-null", "true");
+				case "name":
+					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
+					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
-				case "transfer-ownership":
-					switch (attr.Value) {
-					case "full":
-						gapi_elem.SetAttribute ("owned", "true");
-						break;
-					case "none":
-						break;
-					default:
-						Console.WriteLine ("Unexpected ownership transfer value: " + attr.Value);
-						break;
-					}
+				case "throws":
+					throws = attr.Value == "1";
 					break;
-				case "doc":
+				case "introspectable":
+				case "invoker":
 					// Ignore
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on return-value element: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on virtual-method element: " + attr.Name);
 					break;
 				}
 			}
 		}
 
-		void AddChildInfo (XmlElement gapi_child)
+		void AddChildren (XmlElement gapi_child)
 		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "array":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("c:type"));
-					gapi_child.SetAttribute ("array", "true");
+				case "return-value":
+					ReturnValue retval = new ReturnValue (child);
+					gapi_child.AppendChild (retval.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
-				case "type":
-					AddTypeElementInfo (child, gapi_child);
-					break;
-				default:
-					Console.WriteLine ("Unexpected child on return-value element: " + node.Name);
-					break;
-				}
-			}
-		}
-
-		void AddTypeElementInfo (XmlElement child, XmlElement gapi_child)
-		{
-			foreach (XmlAttribute attr in child.Attributes) {
-				switch (attr.Name) {
-				case "c:type":
-					gapi_child.SetAttribute ("type", attr.Value);
-					break;
-				case "name":
-					// Ignore
+				case "parameters":
+					Parameters parms = new Parameters (child, throws);
+					gapi_child.AppendChild (parms.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on return-value/type element: " + attr.Name);
+					Console.WriteLine ("Unexpected child on callback element: " + node.Name);
 					break;
 				}
 			}

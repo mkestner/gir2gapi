@@ -21,6 +21,7 @@ sources =				\
 	Parameters.cs			\
 	Record.cs			\
 	ReturnValue.cs			\
+	VirtualMethod.cs		\
 	#
 
 resources =				\

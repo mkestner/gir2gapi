@@ -28,6 +28,7 @@ namespace Gir2Gapi {
 	public class Callback {
 
 		XmlElement elem;
+		bool throws;
 
 		public Callback (XmlElement elem)
 		{
@@ -52,6 +53,9 @@ namespace Gir2Gapi {
 				case "c:type":
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
+				case "throws":
+					throws = attr.Value == "1";
+					break;
 				case "doc":
 				case "version":
 					// Ignore
@@ -75,7 +79,7 @@ namespace Gir2Gapi {
 					gapi_child.AppendChild (retval.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "parameters":
-					Parameters parms = new Parameters (child);
+					Parameters parms = new Parameters (child, throws);
 					gapi_child.AppendChild (parms.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				default:

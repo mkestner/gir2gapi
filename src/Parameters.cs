@@ -28,10 +28,12 @@ namespace Gir2Gapi {
 	public class Parameters {
 
 		XmlElement elem;
+		bool throws;
 
-		public Parameters (XmlElement elem)
+		public Parameters (XmlElement elem, bool throws)
 		{
 			this.elem = elem;
+			this.throws = throws;
 		}
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
@@ -40,6 +42,8 @@ namespace Gir2Gapi {
 			if (elem.Attributes.Count > 0) 
 				Console.WriteLine ("Unexpected attributes on parameters element");
 			AddChildren (gapi_elem);
+			if (throws)
+				AddGErrorParameter (gapi_elem);
 			return gapi_elem;
 		}
 
@@ -59,6 +63,14 @@ namespace Gir2Gapi {
 					break;
 				}
 			}
+		}
+
+		void AddGErrorParameter (XmlElement gapi_child)
+		{
+			XmlElement gerr = gapi_child.OwnerDocument.CreateElement ("parameter");
+			gerr.SetAttribute ("type", "GError**");
+			gerr.SetAttribute ("name", "error");
+			gapi_child.AppendChild (gerr);
 		}
 	}
 }
