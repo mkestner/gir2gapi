@@ -91,7 +91,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "type":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("c:type"));
+					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on property element: " + node.Name);

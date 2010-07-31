@@ -50,12 +50,10 @@ namespace Gir2Gapi {
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
-				case "c:type":
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
 				case "throws":
 					throws = attr.Value == "1";
 					break;
+				case "c:type":
 				case "doc":
 				case "version":
 					// Ignore

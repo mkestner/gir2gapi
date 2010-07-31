@@ -64,18 +64,16 @@ namespace Gir2Gapi {
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
-				case "c:type":
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
 				case "parent":
-					gapi_elem.SetAttribute ("parent", FindCType (attr.Value));
+					gapi_elem.SetAttribute ("parent", attr.Value);
 					break;
 				case "glib:get-type":
 					gapi_elem.SetAttribute ("gtype", attr.Value);
 					break;
-				case "glib:type-struct":
+				case "c:type":
 				case "doc":
 				case "glib:type-name":
+				case "glib:type-struct":
 				case "version":
 					// Ignore
 					break;
@@ -83,25 +81,6 @@ namespace Gir2Gapi {
 					Console.WriteLine ("Unexpected attribute on class element: " + attr.Name);
 					break;
 				}
-			}
-		}
-
-		string FindCType (string name)
-		{
-			if (name.StartsWith ("GObject."))
-				return "G" + name.Substring (8);
-
-			if (name.IndexOf ('.') < 0) {
-				foreach (XmlNode node in elem.ParentNode.ChildNodes) {
-					XmlElement sibling = node as XmlElement;
-					if (sibling != null && sibling.GetAttribute ("name") == name)
-						return sibling.GetAttribute ("c:type");
-				}
-				Console.WriteLine ("Unable to find parent type:" + name);
-				return String.Empty;
-			} else {
-				Console.WriteLine ("Unsupported parent type from external namespace: " + name);
-				return String.Empty;
 			}
 		}
 
@@ -128,7 +107,7 @@ namespace Gir2Gapi {
 						gapi_child.AppendChild (implements_elem);
 					}
 					XmlElement iface_elem = gapi_child.OwnerDocument.CreateElement ("interface");
-					iface_elem.SetAttribute ("cname", FindCType (child.GetAttribute ("name")));
+					iface_elem.SetAttribute ("name", child.GetAttribute ("name"));
 					implements_elem.AppendChild (iface_elem);
 					break;
 				case "function":

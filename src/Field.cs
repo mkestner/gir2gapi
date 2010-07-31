@@ -41,10 +41,10 @@ namespace Gir2Gapi {
 				gapi_elem = doc.CreateElement ("field");
 				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
 				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				gapi_elem.SetAttribute ("type", elem ["type"].GetAttribute ("c:type"));
+				gapi_elem.SetAttribute ("type", elem ["type"].GetAttribute ("name"));
 			} else if (elem ["callback"] != null) {
 				gapi_elem = doc.CreateElement ("method");
-				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("c:type"));
+				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("name"));
 			} else {
 				Console.WriteLine ("Unexpected field element: " + elem.OuterXml);
 			}

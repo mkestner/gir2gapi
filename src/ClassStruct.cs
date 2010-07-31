@@ -35,7 +35,7 @@ namespace Gir2Gapi {
 		}
 
 		public string Name {
-			get { return elem.GetAttribute ("c:type"); }
+			get { return elem.GetAttribute ("name"); }
 		}
 
 		public string Parent {
@@ -54,11 +54,11 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
-				case "c:type":
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
-				case "glib:is-gtype-struct-for":
 				case "name":
+					gapi_elem.SetAttribute ("name", attr.Value);
+					break;
+				case "c:type":
+				case "glib:is-gtype-struct-for":
 					// Ignore
 					break;
 				default:

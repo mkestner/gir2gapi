@@ -80,20 +80,11 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in child.Attributes) {
 				switch (attr.Name) {
-				case "c:type":
+				case "name":
 					gapi_child.SetAttribute ("type", attr.Value);
 					break;
-				case "name":
-					if (child.HasAttribute ("c:type"))
-						continue;
-					switch (attr.Value) {
-					case "utf8":
-						gapi_child.SetAttribute ("type", "gchar*");
-						break;
-					default:
-						Console.WriteLine ("Unexpected name in c:type-less constant/type element: " + attr.Value);
-						break;
-					}
+				case "c:type":
+					//Ignore
 					break;
 				default:
 					Console.WriteLine ("Unexpected attribute on constant/type element: " + attr.Name);

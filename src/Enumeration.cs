@@ -51,12 +51,10 @@ namespace Gir2Gapi {
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
-				case "c:type":
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
 				case "glib:get-type":
 					gapi_elem.SetAttribute ("gtype", attr.Value);
 					break;
+				case "c:type":
 				case "doc":
 				case "glib:error-quark":
 				case "glib:type-name":

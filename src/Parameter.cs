@@ -96,7 +96,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "array":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("c:type"));
+					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
 					gapi_child.SetAttribute ("array", "true");
 					break;
 				case "type":
@@ -116,10 +116,10 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in type.Attributes) {
 				switch (attr.Name) {
-				case "c:type":
+				case "name":
 					gapi_child.SetAttribute ("type", attr.Value);
 					break;
-				case "name":
+				case "c:type":
 					// Ignore
 					break;
 				default:
@@ -134,7 +134,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "type":
-					gapi_child.SetAttribute ("element_type", type_child.GetAttribute ("c:type"));
+					gapi_child.SetAttribute ("element_type", type_child.GetAttribute ("name"));
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on parameter/type element: " + node.Name);
