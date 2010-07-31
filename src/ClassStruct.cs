@@ -34,6 +34,10 @@ namespace Gir2Gapi {
 			this.elem = elem;
 		}
 
+		public string Name {
+			get { return elem.GetAttribute ("c:type"); }
+		}
+
 		public string Parent {
 			get { return elem.GetAttribute ("glib:is-gtype-struct-for"); }
 		}
