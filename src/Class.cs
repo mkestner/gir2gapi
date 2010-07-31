@@ -119,6 +119,9 @@ namespace Gir2Gapi {
 				case "field":
 					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
+				case "glib:signal":
+					gapi_child.AppendChild (new Signal (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
 				case "implements":
 					if (implements_elem == null) {
 						implements_elem = gapi_child.OwnerDocument.CreateElement ("implements");
@@ -138,7 +141,6 @@ namespace Gir2Gapi {
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				case "function":
-				case "glib:signal":
 					//FIXME: handle these
 					break;
 				default:

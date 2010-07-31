@@ -24,6 +24,7 @@ sources =				\
 	Property.cs			\
 	Record.cs			\
 	ReturnValue.cs			\
+	Signal.cs			\
 	VirtualMethod.cs		\
 	#
 
