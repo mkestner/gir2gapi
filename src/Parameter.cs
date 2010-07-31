@@ -112,9 +112,9 @@ namespace Gir2Gapi {
 			}
 		}
 
-		void AddTypeElementInfo (XmlElement child, XmlElement gapi_child)
+		void AddTypeElementInfo (XmlElement type, XmlElement gapi_child)
 		{
-			foreach (XmlAttribute attr in child.Attributes) {
+			foreach (XmlAttribute attr in type.Attributes) {
 				switch (attr.Name) {
 				case "c:type":
 					gapi_child.SetAttribute ("type", attr.Value);
@@ -124,6 +124,20 @@ namespace Gir2Gapi {
 					break;
 				default:
 					Console.WriteLine ("Unexpected attribute on parameter/type element: " + attr.Name);
+					break;
+				}
+			}
+
+			foreach (XmlNode node in type.ChildNodes) {
+				XmlElement type_child = node as XmlElement;
+				if (type_child == null)
+					continue;
+				switch (node.Name) {
+				case "type":
+					gapi_child.SetAttribute ("element_type", type_child.GetAttribute ("c:type"));
+					break;
+				default:
+					Console.WriteLine ("Unexpected child on parameter/type element: " + node.Name);
 					break;
 				}
 			}
