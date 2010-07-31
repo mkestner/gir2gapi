@@ -38,6 +38,8 @@ namespace Gir2Gapi {
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
 			XmlElement gapi_elem = doc.CreateElement ("method");
+			if (elem.Name == "function")
+				gapi_elem.SetAttribute ("shared", "true");
 			SetAttributes (gapi_elem);
 			AddChildren (gapi_elem);
 			return gapi_elem;
@@ -48,7 +50,7 @@ namespace Gir2Gapi {
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
 				case "name":
-					gapi_elem.SetAttribute ("name", attr.Value);
+					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
 					break;
 				case "c:identifier":
 					gapi_elem.SetAttribute ("cname", attr.Value);

@@ -131,6 +131,7 @@ namespace Gir2Gapi {
 					iface_elem.SetAttribute ("cname", FindCType (child.GetAttribute ("name")));
 					implements_elem.AppendChild (iface_elem);
 					break;
+				case "function":
 				case "method":
 					gapi_child.AppendChild (new Method (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;
@@ -139,9 +140,6 @@ namespace Gir2Gapi {
 					break;
 				case "virtual-method":
 					gapi_child.AppendChild (new VirtualMethod (child).CreateGapiElement (gapi_child.OwnerDocument));
-					break;
-				case "function":
-					//FIXME: handle these
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on class element: " + node.Name);
