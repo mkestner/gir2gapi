@@ -92,8 +92,9 @@ namespace Gir2Gapi {
 			CreateCallbackElements (gapi_elem);
 			CreateConstantsElement (gapi_elem);
 			CreateObjectElements (gapi_elem);
+			CreateInterfaceElements (gapi_elem);
 
-			// FIXME: functions, interfaces, and records
+			// FIXME: functions and records
 
 			if (cstructs.Count > 0) {
 				Console.Write ("ClassStructs leftover after namespace creation:\n   ");
@@ -126,6 +127,12 @@ namespace Gir2Gapi {
 		{
 			foreach (Enumeration e in enums)
 				gapi_elem.AppendChild (e.CreateGapiElement (gapi_elem.OwnerDocument));
+		}
+
+		void CreateInterfaceElements (XmlElement gapi_elem)
+		{
+			foreach (Interface iface in ifaces)
+				gapi_elem.AppendChild (iface.CreateGapiElement (gapi_elem.OwnerDocument, cstructs, functions));
 		}
 
 		void CreateObjectElements (XmlElement gapi_elem)

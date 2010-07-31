@@ -58,6 +58,7 @@ namespace Gir2Gapi {
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
 				case "c:type":
+				case "doc":
 				case "glib:is-gtype-struct-for":
 					// Ignore
 					break;
