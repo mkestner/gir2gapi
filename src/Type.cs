@@ -25,68 +25,41 @@ using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class ReturnValue {
+	public class Type {
 
 		XmlElement elem;
 
-		public ReturnValue (XmlElement elem)
+		public Type (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
-		public XmlElement CreateGapiElement (XmlDocument doc)
-		{
-			XmlElement gapi_elem = doc.CreateElement ("return-type");
-			SetAttributeInfo (gapi_elem);
-			AddChildInfo (gapi_elem);
-			return gapi_elem;
-		}
-
-		void SetAttributeInfo (XmlElement gapi_elem)
+		public void UpdateGapiElement (XmlElement gapi_elem)
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
-				case "allow-none":
-					gapi_elem.SetAttribute ("allow-null", "true");
+				case "name":
+					gapi_elem.SetAttribute ("type", attr.Value);
 					break;
-				case "transfer-ownership":
-					switch (attr.Value) {
-					case "full":
-						gapi_elem.SetAttribute ("owned", "true");
-						break;
-					case "none":
-						break;
-					default:
-						Console.WriteLine ("Unexpected ownership transfer value: " + attr.Value);
-						break;
-					}
-					break;
-				case "doc":
+				case "c:type":
 					// Ignore
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on return-value element: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on type element: " + attr.Name);
 					break;
 				}
 			}
-		}
 
-		void AddChildInfo (XmlElement gapi_child)
-		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "array":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
-					gapi_child.SetAttribute ("array", "true");
-					break;
 				case "type":
-					new Type (child).UpdateGapiElement (gapi_child);
+					gapi_elem.SetAttribute ("element_type", child.GetAttribute ("name"));
 					break;
 				default:
-					Console.WriteLine ("Unexpected child on return-value element: " + node.Name);
+					Console.WriteLine ("Unexpected child on type element: " + node.Name);
 					break;
 				}
 			}
