@@ -60,7 +60,7 @@ namespace Gir2Gapi {
 					// Ignore
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on callback element: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on constructor element: " + attr.Name);
 					break;
 				}
 			}
@@ -80,7 +80,7 @@ namespace Gir2Gapi {
 					gapi_child.AppendChild (parms.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				default:
-					Console.WriteLine ("Unexpected child on callback element: " + node.Name);
+					Console.WriteLine ("Unexpected child on constructor element: " + node.Name);
 					break;
 				}
 			}
