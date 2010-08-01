@@ -36,7 +36,53 @@ namespace Gir2Gapi {
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			throw new NotImplementedException ();
+			XmlElement gapi_elem = doc.CreateElement ("struct");
+			HandleAttributes (gapi_elem);
+			AddChildren (gapi_elem);
+			return gapi_elem;
+		}
+
+		void HandleAttributes (XmlElement gapi_elem)
+		{
+			foreach (XmlAttribute attr in elem.Attributes) {
+				switch (attr.Name) {
+				case "name":
+					gapi_elem.SetAttribute ("name", attr.Value);
+					break;
+				case "c:type":
+				case "doc":
+				case "version":
+					// Ignore
+					break;
+				default:
+					Console.WriteLine ("Unexpected attribute on record element: " + attr.Name);
+					break;
+				}
+			}
+		}
+
+		void AddChildren (XmlElement gapi_child)
+		{
+			foreach (XmlNode node in elem.ChildNodes) {
+				XmlElement child = node as XmlElement;
+				if (child == null)
+					continue;
+				switch (node.Name) {
+				case "constructor":
+					gapi_child.AppendChild (new Ctor (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "field":
+					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "function":
+				case "method":
+					gapi_child.AppendChild (new Method (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				default:
+					Console.WriteLine ("Unexpected child on record element: " + node.Name);
+					break;
+				}
+			}
 		}
 	}
 }
