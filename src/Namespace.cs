@@ -96,8 +96,6 @@ namespace Gir2Gapi {
 			CreateStructElements (gapi_elem);
 			CreateGlobalClassElement (gapi_elem);
 
-			// FIXME: functions
-
 			if (cstructs.Count > 0) {
 				Console.Write ("ClassStructs leftover after namespace creation:\n   ");
 				foreach (ClassStruct cs in cstructs)
