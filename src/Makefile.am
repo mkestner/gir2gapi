@@ -12,7 +12,6 @@ sources =				\
 	Ctor.cs				\
 	Enumeration.cs			\
 	Field.cs			\
-	Function.cs			\
 	GapiDocument.cs			\
 	GirDocument.cs			\
 	Interface.cs			\

@@ -36,7 +36,7 @@ namespace Gir2Gapi {
 			this.elem = elem;
 		}
 
-		public XmlElement CreateGapiElement (XmlDocument doc, List<ClassStruct> cstructs, List<Function> funcs)
+		public XmlElement CreateGapiElement (XmlDocument doc, List<ClassStruct> cstructs)
 		{
 			XmlElement gapi_elem = doc.CreateElement ("object");
 			HandleAttributes (gapi_elem);

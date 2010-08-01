@@ -34,7 +34,7 @@ namespace Gir2Gapi {
 		List<ClassStruct> cstructs = new List<ClassStruct> ();
 		List<Constant> constants = new List<Constant> ();
 		List<Enumeration> enums = new List<Enumeration> ();
-		List<Function> functions = new List<Function> ();
+		List<Method> functions = new List<Method> ();
 		List<Interface> ifaces = new List<Interface> ();
 		List<Record> records = new List<Record> ();
 
@@ -65,7 +65,7 @@ namespace Gir2Gapi {
 					constants.Add (new Constant (child));
 					break;
 				case "function":
-					functions.Add (new Function (child));
+					functions.Add (new Method (child));
 					break;
 				case "interface":
 					ifaces.Add (new Interface (child));
@@ -94,6 +94,7 @@ namespace Gir2Gapi {
 			CreateObjectElements (gapi_elem);
 			CreateInterfaceElements (gapi_elem);
 			CreateStructElements (gapi_elem);
+			CreateGlobalClassElement (gapi_elem);
 
 			// FIXME: functions
 
@@ -130,16 +131,27 @@ namespace Gir2Gapi {
 				gapi_elem.AppendChild (e.CreateGapiElement (gapi_elem.OwnerDocument));
 		}
 
+		void CreateGlobalClassElement (XmlElement gapi_elem)
+		{
+			if (functions.Count == 0)
+				return;
+			XmlElement elem = gapi_elem.OwnerDocument.CreateElement ("class");
+			elem.SetAttribute ("name", "Global");
+			foreach (Method m in functions)
+				elem.AppendChild (m.CreateGapiElement (gapi_elem.OwnerDocument));
+			gapi_elem.AppendChild (elem);
+		}
+
 		void CreateInterfaceElements (XmlElement gapi_elem)
 		{
 			foreach (Interface iface in ifaces)
-				gapi_elem.AppendChild (iface.CreateGapiElement (gapi_elem.OwnerDocument, cstructs, functions));
+				gapi_elem.AppendChild (iface.CreateGapiElement (gapi_elem.OwnerDocument, cstructs));
 		}
 
 		void CreateObjectElements (XmlElement gapi_elem)
 		{
 			foreach (Class cls in classes)
-				gapi_elem.AppendChild (cls.CreateGapiElement (gapi_elem.OwnerDocument, cstructs, functions));
+				gapi_elem.AppendChild (cls.CreateGapiElement (gapi_elem.OwnerDocument, cstructs));
 		}
 
 		void CreateStructElements (XmlElement gapi_elem)
