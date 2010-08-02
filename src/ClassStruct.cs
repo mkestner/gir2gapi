@@ -54,12 +54,12 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
-				case "name":
-					gapi_elem.SetAttribute ("name", attr.Value);
-					break;
 				case "c:type":
+					gapi_elem.SetAttribute ("cname", attr.Value);
+					break;
 				case "doc":
 				case "glib:is-gtype-struct-for":
+				case "name":
 					// Ignore
 					break;
 				default:

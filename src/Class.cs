@@ -61,16 +61,18 @@ namespace Gir2Gapi {
 				case "abstract":
 					gapi_elem.SetAttribute ("abstract", attr.Value);
 					break;
+				case "c:type":
+					gapi_elem.SetAttribute ("cname", attr.Value);
+					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
 				case "parent":
-					gapi_elem.SetAttribute ("parent", attr.Value);
+					gapi_elem.SetAttribute ("parent", SymbolTable.Lookup (attr.Value));
 					break;
 				case "glib:get-type":
 					gapi_elem.SetAttribute ("gtype", attr.Value);
 					break;
-				case "c:type":
 				case "doc":
 				case "glib:type-name":
 				case "glib:type-struct":

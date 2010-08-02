@@ -34,15 +34,27 @@ namespace Gir2Gapi {
 			this.elem = elem;
 		}
 
+		string GetCType (XmlElement type_elem)
+		{
+			return type_elem.HasAttribute ("c:type") ? type_elem.GetAttribute ("c:type") : SymbolTable.Lookup (type_elem.GetAttribute ("name"));
+		}
+
 		public void UpdateGapiElement (XmlElement gapi_elem)
+		{
+			if (Converter.Default.Verbose)
+				Validate ();
+			gapi_elem.SetAttribute ("type", GetCType (elem));
+			if (elem ["type"] != null)
+				gapi_elem.SetAttribute ("element_type", GetCType (elem ["type"]));
+		}
+
+		void Validate ()
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
 				case "name":
-					gapi_elem.SetAttribute ("type", attr.Value);
-					break;
 				case "c:type":
-					// Ignore
+					// known
 					break;
 				default:
 					Console.WriteLine ("Unexpected attribute on type element: " + attr.Name);
@@ -56,7 +68,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "type":
-					gapi_elem.SetAttribute ("element_type", child.GetAttribute ("name"));
+					// known
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on type element: " + node.Name);

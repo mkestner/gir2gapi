@@ -21,34 +21,61 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class Field {
+	public static class SymbolTable {
 
-		XmlElement elem;
+		static Dictionary<string, string> symbols;
 
-		public Field (XmlElement elem)
+		static SymbolTable ()
 		{
-			this.elem = elem;
+			symbols = new Dictionary<string, string> ();
+			symbols ["utf8"] = "gchar*";
 		}
 
-		public XmlElement CreateGapiElement (XmlDocument doc)
+		public static void AddTypes (XmlElement ns)
 		{
-			XmlElement gapi_elem = null;
-			if (elem ["type"] != null) {
-				gapi_elem = doc.CreateElement ("field");
-				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
-				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				new Type (elem ["type"]).UpdateGapiElement (gapi_elem);
-			} else if (elem ["callback"] != null) {
-				gapi_elem = doc.CreateElement ("method");
-				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("name"));
-			} else {
-				Console.WriteLine ("Unexpected field element: " + elem.OuterXml);
+			AddNamespace (ns, false);
+		}
+
+		public static void AddImport (XmlElement import)
+		{
+			AddNamespace (import, true);
+		}
+
+		public static string Lookup (string name)
+		{
+			string ctype;
+			if (symbols.TryGetValue (name, out ctype))
+				return ctype;
+			Console.WriteLine ("Lookup failed for type " + name);
+			return null;
+		}
+
+		static void AddNamespace (XmlElement ns, bool qual)
+		{
+			string prefix = qual ? ns.GetAttribute ("name") + "." : String.Empty;
+
+			foreach (XmlNode node in ns.ChildNodes) {
+				XmlElement child = node as XmlElement;
+				if (child == null)
+					continue;
+				switch (node.Name) {
+				case "bitfield":
+				case "callback":
+				case "class":
+				case "enumeration":
+				case "interface":
+				case "record":
+					symbols [prefix + child.GetAttribute ("name")] = child.GetAttribute ("c:type");
+					break;
+				default:
+					break;
+				}
 			}
-			return gapi_elem;
 		}
 	}
 }

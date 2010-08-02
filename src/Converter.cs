@@ -31,12 +31,18 @@ namespace Gir2Gapi {
 		public static int Main (string[] args)
 		{
 			try {
-				new Converter (args).Run ();
+				def = new Converter (args);
+				def.Run ();
 				return 0;
 			} catch (Exception e) {
 				Console.WriteLine (e);
 				return 1;
 			}
+		}
+
+		static Converter def;
+		public static Converter Default {
+			get { return def; }
 		}
 
 		string gir_path;
@@ -59,6 +65,10 @@ namespace Gir2Gapi {
 				Usage ();
 				throw new ArgumentException ("args");
 			}
+		}
+
+		public bool Verbose {
+			get { return true; }
 		}
 
 		void Usage ()

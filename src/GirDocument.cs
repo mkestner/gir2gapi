@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 
 namespace Gir2Gapi {
@@ -39,10 +40,19 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "include":
+					string inc_path = Path.Combine (Path.GetDirectoryName (path), elem.GetAttribute ("name") + "-" + elem.GetAttribute ("version") + ".gir");
+					if (File.Exists (inc_path)) {
+						XmlDocument inc = new XmlDocument ();
+						inc.Load (inc_path);
+						SymbolTable.AddImport (inc.DocumentElement ["namespace"]);
+					} else
+						Console.WriteLine ("unable to find included gir " + inc_path);
+					break;
 				case "package":
 				case "c:include":
 					break;
 				case "namespace":
+					SymbolTable.AddTypes (elem);
 					namespaces.Add (new Namespace (elem));
 					break;
 				default:

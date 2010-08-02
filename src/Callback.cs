@@ -47,13 +47,15 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
+				case "c:type":
+					gapi_elem.SetAttribute ("cname", attr.Value);
+					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
 				case "throws":
 					throws = attr.Value == "1";
 					break;
-				case "c:type":
 				case "doc":
 				case "version":
 					// Ignore

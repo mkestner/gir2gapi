@@ -67,27 +67,10 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "type":
-					AddTypeElementInfo (child, gapi_child);
+					new Type (child).UpdateGapiElement (gapi_child);
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on constant element: " + node.Name);
-					break;
-				}
-			}
-		}
-
-		void AddTypeElementInfo (XmlElement child, XmlElement gapi_child)
-		{
-			foreach (XmlAttribute attr in child.Attributes) {
-				switch (attr.Name) {
-				case "name":
-					gapi_child.SetAttribute ("type", attr.Value);
-					break;
-				case "c:type":
-					//Ignore
-					break;
-				default:
-					Console.WriteLine ("Unexpected attribute on constant/type element: " + attr.Name);
 					break;
 				}
 			}
