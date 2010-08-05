@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53DB4B33-B723-4BBA-8C50-78211FA97D87}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>gir2gapi</RootNamespace>
+    <AssemblyName>gir2gapi</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\Callback.cs" />
+    <Compile Include="src\Class.cs" />
+    <Compile Include="src\ClassStruct.cs" />
+    <Compile Include="src\Constant.cs" />
+    <Compile Include="src\Converter.cs" />
+    <Compile Include="src\Ctor.cs" />
+    <Compile Include="src\Enumeration.cs" />
+    <Compile Include="src\Field.cs" />
+    <Compile Include="src\GapiDocument.cs" />
+    <Compile Include="src\GirDocument.cs" />
+    <Compile Include="src\Interface.cs" />
+    <Compile Include="src\Mangler.cs" />
+    <Compile Include="src\Method.cs" />
+    <Compile Include="src\Namespace.cs" />
+    <Compile Include="src\Parameter.cs" />
+    <Compile Include="src\Parameters.cs" />
+    <Compile Include="src\Property.cs" />
+    <Compile Include="src\Record.cs" />
+    <Compile Include="src\ReturnValue.cs" />
+    <Compile Include="src\Signal.cs" />
+    <Compile Include="src\SymbolTable.cs" />
+    <Compile Include="src\Type.cs" />
+    <Compile Include="src\VirtualMethod.cs" />
+    <Compile Include="src\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <EmbeddedResource Include="src\empty-api.xml">
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
+      <LogicalName>empty-api.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
