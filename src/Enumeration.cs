@@ -93,7 +93,7 @@ namespace Gir2Gapi {
 			foreach (XmlAttribute attr in child.Attributes) {
 				switch (attr.Name) {
 				case "name":
-					gapi_child.SetAttribute ("name", attr.Value);
+					gapi_child.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
 					break;
 				case "c:identifier":
 					gapi_child.SetAttribute ("cname", attr.Value);
