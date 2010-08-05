@@ -1,11 +1,33 @@
-gir2gapi - Converter to produce GAPI XML files from gir files.
+Conversion tool to produce Gapi XML files from gir files.
+
+Description:
+------------
 
 This project hopes to take advantage of the gobject-introspection
-integration into Gnome libraries to replace the GAPI parsing of 
-C sources.  The idea is to produce a converter to produce GAPI
-api.xml files from a gir definition of the API, and then consume
+scanning of Gnome libraries to replace the GAPI parser.  The goal 
+is to produce Gapi XML files from a gir definition of the API, and then consume
 this output in the existing generation tools.  It will amount to
-a proprocessing step but one that should eliminate parsing
+a preprocessing step but one that should eliminate parsing
 headaches and hopefully result in less manual intervention
-into the binding production.
+and markup in binding preparation.
 
+
+Build:
+------
+
+On mono, invoke xbuild in the project root dir, or open gapi2gir.sln
+with MonoDevelop.  The project can also be build with Visual C# or 
+Visual Studio on windows, or using msbuild without the IDE.
+
+
+Usage:
+------
+
+gapi2gir --gir=path/to/foo.gir --out=path/to/gapi.xml
+
+The tool is designed to spew warnings when it detects attributes or 
+child elements it does not expect.  Some of these will probably be
+unuseful.  We intentionally ignore many of the attributes in gir.  If
+you encounter any warnings, feel free to forward them to the project
+maintainer for investigation, particularly if it appears to be useful
+information being ignored.
