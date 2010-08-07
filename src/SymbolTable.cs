@@ -37,6 +37,8 @@ namespace Gir2Gapi {
 			symbols ["int"] = "int";
 			symbols ["int32"] = "gint32";
 			symbols ["uint32"] = "guint32";
+			symbols ["int64"] = "gint64";
+			symbols ["uint64"] = "guint64";
 		}
 
 		public static void AddTypes (XmlElement ns)
