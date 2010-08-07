@@ -60,6 +60,7 @@
     <Compile Include="src\Type.cs" />
     <Compile Include="src\VirtualMethod.cs" />
     <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\Alias.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

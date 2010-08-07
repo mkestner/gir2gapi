@@ -34,6 +34,9 @@ namespace Gir2Gapi {
 		{
 			symbols = new Dictionary<string, string> ();
 			symbols ["utf8"] = "gchar*";
+			symbols ["int"] = "int";
+			symbols ["int32"] = "gint32";
+			symbols ["uint32"] = "guint32";
 		}
 
 		public static void AddTypes (XmlElement ns)
@@ -55,9 +58,9 @@ namespace Gir2Gapi {
 			return null;
 		}
 
-		static void AddNamespace (XmlElement ns, bool qual)
+		static void AddNamespace (XmlElement ns, bool qual_only)
 		{
-			string prefix = qual ? ns.GetAttribute ("name") + "." : String.Empty;
+			string prefix = ns.GetAttribute ("name") + ".";
 
 			foreach (XmlNode node in ns.ChildNodes) {
 				XmlElement child = node as XmlElement;
@@ -71,6 +74,8 @@ namespace Gir2Gapi {
 				case "interface":
 				case "record":
 					symbols [prefix + child.GetAttribute ("name")] = child.GetAttribute ("c:type");
+					if (!qual_only)
+						symbols [child.GetAttribute ("name")] = child.GetAttribute ("c:type");
 					break;
 				default:
 					break;

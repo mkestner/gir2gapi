@@ -24,43 +24,22 @@ using System;
 using System.Xml;
 
 namespace Gir2Gapi {
-
-	public class Field {
-
+	
+	public class Alias {
+		
 		XmlElement elem;
-
-		public Field (XmlElement elem)
+		
+		public Alias (XmlElement elem)
 		{
 			this.elem = elem;
 		}
-
+		
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = null;
-			if (elem ["type"] != null) {
-				gapi_elem = doc.CreateElement ("field");
-				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
-				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				new Type (elem ["type"]).UpdateGapiElement (gapi_elem);
-			} else if (elem ["array"] != null) {
-				gapi_elem = doc.CreateElement ("field");
-				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
-				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				XmlElement array_elem = elem ["array"];
-				if (array_elem.HasAttribute ("fixed-size"))
-					gapi_elem.SetAttribute ("array_len", array_elem.GetAttribute ("fixed-size"));
-				else
-					gapi_elem.SetAttribute ("null_term", "1");
-				if (array_elem.HasAttribute ("c:type"))
-					gapi_elem.SetAttribute ("type", array_elem.GetAttribute ("c:type"));
-				else
-					new Type (array_elem ["type"]).UpdateGapiElement (gapi_elem);
-			} else if (elem ["callback"] != null) {
-				gapi_elem = doc.CreateElement ("method");
-				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("name"));
-			} else {
-				Console.WriteLine ("Unexpected child on field element: " + elem.InnerXml);
-			}
+			XmlElement gapi_elem = doc.CreateElement ("alias");
+			gapi_elem.SetAttribute ("name", elem.GetAttribute ("name"));
+			gapi_elem.SetAttribute ("cname", elem.GetAttribute ("c:type"));
+			gapi_elem.SetAttribute ("type", SymbolTable.Lookup (elem.GetAttribute ("target")));
 			return gapi_elem;
 		}
 	}

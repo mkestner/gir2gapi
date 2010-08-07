@@ -54,8 +54,10 @@ namespace Gir2Gapi {
 				case "throws":
 					throws = attr.Value == "1";
 					break;
+				case "doc":
 				case "introspectable":
 				case "invoker":
+				case "version":
 					// Ignore
 					break;
 				default:

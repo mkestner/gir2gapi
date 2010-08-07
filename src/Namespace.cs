@@ -29,6 +29,7 @@ namespace Gir2Gapi {
 	public class Namespace {
 
 		XmlElement elem;
+		List<Alias> aliases = new List<Alias> ();
 		List<Callback> callbacks = new List<Callback> ();
 		List<Class> classes = new List<Class> ();
 		List<ClassStruct> cstructs = new List<ClassStruct> ();
@@ -51,6 +52,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "alias":
+					aliases.Add (new Alias (child));
+					break;
 				case "bitfield":
 				case "enumeration":
 					enums.Add (new Enumeration (child));
@@ -88,6 +92,7 @@ namespace Gir2Gapi {
 			XmlElement gapi_elem = doc.CreateElement ("namespace");
 			SetAttributes (gapi_elem);
 
+			CreateAliasElements (gapi_elem);
 			CreateEnumElements (gapi_elem);
 			CreateCallbackElements (gapi_elem);
 			CreateConstantsElement (gapi_elem);
@@ -104,6 +109,12 @@ namespace Gir2Gapi {
 			}
 
 			return gapi_elem;
+		}
+
+		void CreateAliasElements (XmlElement gapi_elem)
+		{
+			foreach (Alias a in aliases)
+				gapi_elem.AppendChild (a.CreateGapiElement (gapi_elem.OwnerDocument));
 		}
 
 		void CreateCallbackElements (XmlElement gapi_elem)

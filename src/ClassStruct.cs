@@ -60,6 +60,7 @@ namespace Gir2Gapi {
 				case "doc":
 				case "glib:is-gtype-struct-for":
 				case "name":
+				case "version":
 					// Ignore
 					break;
 				default:

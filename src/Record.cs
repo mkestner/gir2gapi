@@ -36,7 +36,7 @@ namespace Gir2Gapi {
 
 		public XmlElement CreateGapiElement (XmlDocument doc)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("struct");
+			XmlElement gapi_elem = doc.CreateElement (elem.HasAttribute ("glib:get-type") ? "boxed" : "struct");
 			HandleAttributes (gapi_elem);
 			AddChildren (gapi_elem);
 			return gapi_elem;
@@ -49,10 +49,14 @@ namespace Gir2Gapi {
 				case "c:type":
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
+				case "glib:get-type":
+					gapi_elem.SetAttribute ("gtype", attr.Value);
+					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
 				case "doc":
+				case "glib:type-name":
 				case "version":
 					// Ignore
 					break;
