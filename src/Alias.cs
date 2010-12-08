@@ -39,7 +39,9 @@ namespace Gir2Gapi {
 			XmlElement gapi_elem = doc.CreateElement ("alias");
 			gapi_elem.SetAttribute ("name", elem.GetAttribute ("name"));
 			gapi_elem.SetAttribute ("cname", elem.GetAttribute ("c:type"));
-			gapi_elem.SetAttribute ("type", SymbolTable.Lookup (elem.GetAttribute ("target")));
+			foreach (XmlNode node in elem.ChildNodes)
+				if (node.Name == "type")
+					new Type ((XmlElement) node).UpdateGapiElement (gapi_elem);
 			return gapi_elem;
 		}
 	}
