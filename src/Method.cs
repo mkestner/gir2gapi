@@ -55,9 +55,13 @@ namespace Gir2Gapi {
 				case "c:identifier":
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
+				case "deprecated":
+					gapi_elem.SetAttribute ("deprecated", "1");
+					break;
 				case "throws":
 					throws = attr.Value == "1";
 					break;
+				case "deprecated-version":
 				case "doc":
 				case "introspectable":
 				case "version":

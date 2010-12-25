@@ -56,6 +56,9 @@ namespace Gir2Gapi {
 					if (attr.Value == "1")
 						gapi_elem.SetAttribute ("construct-only", "true");
 					break;
+				case "deprecated":
+					gapi_elem.SetAttribute ("deprecated", "1");
+					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
 					gapi_elem.SetAttribute ("cname", attr.Value);
@@ -72,6 +75,7 @@ namespace Gir2Gapi {
 					if (attr.Value == "1")
 						gapi_elem.SetAttribute ("writeable", "true");
 					break;
+				case "deprecated-version":
 				case "doc":
 				case "version":
 					// Ignore

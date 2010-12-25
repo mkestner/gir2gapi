@@ -47,6 +47,9 @@ namespace Gir2Gapi {
 		{
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
+				case "deprecated":
+					gapi_elem.SetAttribute ("deprecated", "1");
+					break;
 				case "name":
 					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
 					gapi_elem.SetAttribute ("cname", attr.Value);
@@ -54,6 +57,7 @@ namespace Gir2Gapi {
 				case "throws":
 					throws = attr.Value == "1";
 					break;
+				case "deprecated-version":
 				case "doc":
 				case "introspectable":
 				case "invoker":
