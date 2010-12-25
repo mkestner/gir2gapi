@@ -71,9 +71,7 @@ namespace Gir2Gapi {
 				case "doc":
 				case "glib:type-name":
 				case "glib:type-struct":
-#if false
 				case "version":
-#endif
 					// Ignore
 					break;
 				default:

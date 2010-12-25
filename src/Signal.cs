@@ -50,6 +50,9 @@ namespace Gir2Gapi {
 					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
+				case "version":
+					// Ignore
+					break;
 				default:
 					Console.WriteLine ("Unexpected attribute on signal element: " + attr.Name);
 					break;
