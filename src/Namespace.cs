@@ -179,7 +179,8 @@ namespace Gir2Gapi {
 				case "shared-library":
 					gapi_elem.SetAttribute ("library", attr.Value);
 					break;
-				case "c:prefix":
+				case "c:identifier-prefixes":
+				case "c:symbol-prefixes":
 				case "version":
 					break;
 				default:
