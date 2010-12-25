@@ -29,6 +29,17 @@ namespace Gir2Gapi {
 	public static class SymbolTable {
 
 		static Dictionary<string, string> symbols;
+		
+		static string[] fundamentals = new string[] {
+			"gboolean",
+			"gint",
+			"glong",
+			"gpointer",
+			"gshort",
+			"guint",
+			"gulong",
+			"gushort",
+		};
 
 		static SymbolTable ()
 		{
@@ -39,6 +50,7 @@ namespace Gir2Gapi {
 			symbols ["uint32"] = "guint32";
 			symbols ["int64"] = "gint64";
 			symbols ["uint64"] = "guint64";
+			symbols ["none"] = "void";
 		}
 
 		public static void AddTypes (XmlElement ns)
@@ -56,6 +68,8 @@ namespace Gir2Gapi {
 			string ctype;
 			if (symbols.TryGetValue (name, out ctype))
 				return ctype;
+			else if (Array.IndexOf (fundamentals, name) >= 0)
+				return name;
 			Console.WriteLine ("Lookup failed for type " + name);
 			return null;
 		}
