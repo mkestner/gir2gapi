@@ -77,6 +77,7 @@ namespace Gir2Gapi {
 					break;
 				case "deprecated-version":
 				case "doc":
+				case "introspectable":
 				case "version":
 					// Ignore
 					break;
