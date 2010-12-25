@@ -57,6 +57,7 @@ namespace Gir2Gapi {
 				case "c:type":
 					gapi_elem.SetAttribute ("cname", attr.Value);
 					break;
+				case "disguised":
 				case "doc":
 				case "glib:is-gtype-struct-for":
 				case "name":
@@ -77,6 +78,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "field":
 					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;

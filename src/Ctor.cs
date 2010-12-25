@@ -73,6 +73,7 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
 				case "return-value":
 					break;
 				case "parameters":

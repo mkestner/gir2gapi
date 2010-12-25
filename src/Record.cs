@@ -55,6 +55,8 @@ namespace Gir2Gapi {
 				case "name":
 					gapi_elem.SetAttribute ("name", attr.Value);
 					break;
+				case "c:symbol-prefix":
+				case "disguised":
 				case "doc":
 				case "glib:type-name":
 				case "version":
@@ -76,6 +78,9 @@ namespace Gir2Gapi {
 				switch (node.Name) {
 				case "constructor":
 					gapi_child.AppendChild (new Ctor (child).CreateGapiElement (gapi_child.OwnerDocument));
+					break;
+				case "doc":
+					// Ignore
 					break;
 				case "field":
 					gapi_child.AppendChild (new Field (child).CreateGapiElement (gapi_child.OwnerDocument));

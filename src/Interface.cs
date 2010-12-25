@@ -67,6 +67,7 @@ namespace Gir2Gapi {
 				case "glib:get-type":
 					gapi_elem.SetAttribute ("gtype", attr.Value);
 					break;
+				case "c:symbol-prefix":
 				case "doc":
 				case "glib:type-name":
 				case "glib:type-struct":
@@ -89,6 +90,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "glib:signal":
 					gapi_child.AppendChild (new Signal (child).CreateGapiElement (gapi_child.OwnerDocument));
 					break;

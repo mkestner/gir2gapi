@@ -74,6 +74,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "return-value":
 					ReturnValue retval = new ReturnValue (child);
 					gapi_child.AppendChild (retval.CreateGapiElement (gapi_child.OwnerDocument));

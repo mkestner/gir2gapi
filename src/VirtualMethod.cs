@@ -74,6 +74,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "return-value":
 					ReturnValue retval = new ReturnValue (child);
 					gapi_child.AppendChild (retval.CreateGapiElement (gapi_child.OwnerDocument));
@@ -83,7 +86,7 @@ namespace Gir2Gapi {
 					gapi_child.AppendChild (parms.CreateGapiElement (gapi_child.OwnerDocument));
 					break;
 				default:
-					Console.WriteLine ("Unexpected child on callback element: " + node.Name);
+					Console.WriteLine ("Unexpected child on virtual-method element: " + node.Name);
 					break;
 				}
 			}

@@ -85,6 +85,9 @@ namespace Gir2Gapi {
 				case "type":
 					new Type (child).UpdateGapiElement (gapi_child);
 					break;
+				case "doc":
+					// Ignore
+					break;
 				default:
 					Console.WriteLine ("Unexpected child on return-value element: " + node.Name);
 					break;

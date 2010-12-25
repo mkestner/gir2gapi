@@ -99,6 +99,9 @@ namespace Gir2Gapi {
 					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
 					gapi_child.SetAttribute ("array", "true");
 					break;
+				case "doc":
+					// Ignore
+					break;
 				case "type":
 					new Type (child).UpdateGapiElement (gapi_child);
 					break;

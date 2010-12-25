@@ -90,6 +90,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "type":
 					new Type (child).UpdateGapiElement (gapi_child);
 					break;

@@ -77,6 +77,9 @@ namespace Gir2Gapi {
 				if (child == null)
 					continue;
 				switch (node.Name) {
+				case "doc":
+					// Ignore
+					break;
 				case "member":
 					gapi_child.AppendChild (CreateMember (child, gapi_child.OwnerDocument));
 					break;
