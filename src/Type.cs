@@ -36,7 +36,13 @@ namespace Gir2Gapi {
 
 		string GetCType (XmlElement type_elem)
 		{
-			return type_elem.HasAttribute ("c:type") ? type_elem.GetAttribute ("c:type") : SymbolTable.Lookup (type_elem.GetAttribute ("name"));
+			if (type_elem.HasAttribute ("c:type"))
+				return type_elem.GetAttribute ("c:type");
+			else if (type_elem.HasAttribute ("name"))
+				return SymbolTable.Lookup (type_elem.GetAttribute ("name"));
+
+			Console.WriteLine ("Unexpected type element: " + elem.OuterXml);
+			return String.Empty;
 		}
 
 		public void UpdateGapiElement (XmlElement gapi_elem, bool is_element_type)
