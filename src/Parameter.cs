@@ -96,14 +96,13 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "array":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
-					gapi_child.SetAttribute ("array", "true");
+					new Array (child).UpdateGapiElement (gapi_child);
 					break;
 				case "doc":
 					// Ignore
 					break;
 				case "type":
-					new Type (child).UpdateGapiElement (gapi_child);
+					new Type (child).UpdateGapiElement (gapi_child, false);
 					break;
 				case "varargs":
 					gapi_child.SetAttribute ("ellipsis", "true");

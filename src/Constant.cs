@@ -67,7 +67,7 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "type":
-					new Type (child).UpdateGapiElement (gapi_child);
+					new Type (child).UpdateGapiElement (gapi_child, false);
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on constant element: " + node.Name);

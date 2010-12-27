@@ -37,6 +37,7 @@ namespace Gir2Gapi {
 			"gpointer",
 			"gshort",
 			"guint",
+			"guint8",
 			"gulong",
 			"gushort",
 		};
@@ -68,7 +69,7 @@ namespace Gir2Gapi {
 			string ctype;
 			if (symbols.TryGetValue (name, out ctype))
 				return ctype;
-			else if (Array.IndexOf (fundamentals, name) >= 0)
+			else if (System.Array.IndexOf (fundamentals, name) >= 0)
 				return name;
 			Console.WriteLine ("Lookup failed for type " + name);
 			return null;

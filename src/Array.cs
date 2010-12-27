@@ -21,88 +21,62 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Xml;
 
 namespace Gir2Gapi {
 
-	public class Property {
+	public class Array {
 
 		XmlElement elem;
 
-		public Property (XmlElement elem)
+		public Array (XmlElement elem)
 		{
 			this.elem = elem;
 		}
 
-		public XmlElement CreateGapiElement (XmlDocument doc)
+		public void UpdateGapiElement (XmlElement gapi_elem)
 		{
-			XmlElement gapi_elem = doc.CreateElement ("property");
-			gapi_elem.SetAttribute ("readable", "true");
 			HandleAttributes (gapi_elem);
 			AddChildren (gapi_elem);
-			return gapi_elem;
 		}
 
 		void HandleAttributes (XmlElement gapi_elem)
 		{
+			bool needs_array = true;
 			foreach (XmlAttribute attr in elem.Attributes) {
 				switch (attr.Name) {
-				case "construct":
-					if (attr.Value == "1")
-						gapi_elem.SetAttribute ("construct", "true");
+				case "c:type":
+					gapi_elem.SetAttribute ("type", attr.Value);
 					break;
-				case "construct-only":
-					if (attr.Value == "1")
-						gapi_elem.SetAttribute ("construct-only", "true");
+				case "fixed-size":
+					gapi_elem.SetAttribute ("array_len", attr.Value);
 					break;
-				case "deprecated":
-					gapi_elem.SetAttribute ("deprecated", "1");
+				case "length":
+					gapi_elem.SetAttribute ("length_param", attr.Value);
 					break;
 				case "name":
-					gapi_elem.SetAttribute ("name", Mangler.StudlyCase (attr.Value));
-					gapi_elem.SetAttribute ("cname", attr.Value);
-					break;
-				case "readable":
-					if (attr.Value == "0")
-						gapi_elem.SetAttribute ("readable", "false");
-					break;
-				case "transfer-ownership":
-					if (attr.Value == "full")
-						gapi_elem.SetAttribute ("owned", "true");
-					break;
-				case "writable":
-					if (attr.Value == "1")
-						gapi_elem.SetAttribute ("writeable", "true");
-					break;
-				case "deprecated-version":
-				case "doc":
-				case "introspectable":
-				case "version":
-					// Ignore
+					if (!elem.HasAttribute ("c:type"))
+						gapi_elem.SetAttribute ("type", SymbolTable.Lookup (attr.Value));
+					needs_array = false;
 					break;
 				default:
-					Console.WriteLine ("Unexpected attribute on property element: " + attr.Name);
+					Console.WriteLine ("Unexpected attribute on array element: " + attr.Name);
 					break;
 				}
 			}
+			if (needs_array)
+				gapi_elem.SetAttribute ("array", "1");
 		}
 
-		void AddChildren (XmlElement gapi_child)
+		void AddChildren (XmlElement gapi_elem)
 		{
 			foreach (XmlNode node in elem.ChildNodes) {
 				XmlElement child = node as XmlElement;
 				if (child == null)
 					continue;
 				switch (node.Name) {
-				case "doc":
-					// Ignore
-					break;
 				case "type":
-					new Type (child).UpdateGapiElement (gapi_child, false);
-					break;
-				case "array":
-					new Array (child).UpdateGapiElement (gapi_child);
+					new Type (child).UpdateGapiElement (gapi_elem, true);
 					break;
 				default:
 					Console.WriteLine ("Unexpected child on property element: " + node.Name);
@@ -112,4 +86,3 @@ namespace Gir2Gapi {
 		}
 	}
 }
-

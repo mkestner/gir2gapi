@@ -53,6 +53,10 @@ namespace Gir2Gapi {
 					switch (attr.Value) {
 					case "full":
 						gapi_elem.SetAttribute ("owned", "true");
+						gapi_elem.SetAttribute ("elements_owned", "true");
+						break;
+					case "container":
+						gapi_elem.SetAttribute ("owned", "true");
 						break;
 					case "none":
 						break;
@@ -79,11 +83,10 @@ namespace Gir2Gapi {
 					continue;
 				switch (node.Name) {
 				case "array":
-					gapi_child.SetAttribute ("type", child.GetAttribute ("name"));
-					gapi_child.SetAttribute ("array", "true");
+					new Array (child).UpdateGapiElement (gapi_child);
 					break;
 				case "type":
-					new Type (child).UpdateGapiElement (gapi_child);
+					new Type (child).UpdateGapiElement (gapi_child, false);
 					break;
 				case "doc":
 					// Ignore

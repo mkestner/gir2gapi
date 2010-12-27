@@ -41,20 +41,12 @@ namespace Gir2Gapi {
 				gapi_elem = doc.CreateElement ("field");
 				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
 				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				new Type (elem ["type"]).UpdateGapiElement (gapi_elem);
+				new Type (elem ["type"]).UpdateGapiElement (gapi_elem, false);
 			} else if (elem ["array"] != null) {
 				gapi_elem = doc.CreateElement ("field");
 				gapi_elem.SetAttribute ("name", Mangler.StudlyCase (elem.GetAttribute ("name")));
 				gapi_elem.SetAttribute ("cname", elem.GetAttribute ("name"));
-				XmlElement array_elem = elem ["array"];
-				if (array_elem.HasAttribute ("fixed-size"))
-					gapi_elem.SetAttribute ("array_len", array_elem.GetAttribute ("fixed-size"));
-				else
-					gapi_elem.SetAttribute ("null_term", "1");
-				if (array_elem.HasAttribute ("c:type"))
-					gapi_elem.SetAttribute ("type", array_elem.GetAttribute ("c:type"));
-				else
-					new Type (array_elem ["type"]).UpdateGapiElement (gapi_elem);
+				new Array (elem ["array"]).UpdateGapiElement (gapi_elem);
 			} else if (elem ["callback"] != null) {
 				gapi_elem = doc.CreateElement ("method");
 				gapi_elem.SetAttribute ("vm", elem ["callback"].GetAttribute ("name"));

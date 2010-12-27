@@ -39,13 +39,14 @@ namespace Gir2Gapi {
 			return type_elem.HasAttribute ("c:type") ? type_elem.GetAttribute ("c:type") : SymbolTable.Lookup (type_elem.GetAttribute ("name"));
 		}
 
-		public void UpdateGapiElement (XmlElement gapi_elem)
+		public void UpdateGapiElement (XmlElement gapi_elem, bool is_element_type)
 		{
 			if (Converter.Default.Verbose)
 				Validate ();
-			gapi_elem.SetAttribute ("type", GetCType (elem));
-			if (elem ["type"] != null)
-				gapi_elem.SetAttribute ("element_type", GetCType (elem ["type"]));
+			gapi_elem.SetAttribute (is_element_type ? "element_type" : "type", GetCType (elem));
+			if (is_element_type || elem ["type"] == null)
+				return;
+			new Type (elem ["type"]).UpdateGapiElement (gapi_elem, true);
 		}
 
 		void Validate ()
